@@ -181,6 +181,13 @@ public class MinecraftProtocol extends PacketProtocol {
     private SubProtocol targetSubProtocol;
 
     /**
+     * Overwrite the default (usually newest) minecraft protocol version
+     */
+    @Getter
+    @Setter
+    private int preferredProtocol;
+
+    /**
      * The player's identity.
      */
     @Getter
@@ -248,7 +255,7 @@ public class MinecraftProtocol extends PacketProtocol {
         this.setSubProtocol(SubProtocol.HANDSHAKE, true, session);
 
         if(this.useDefaultListeners) {
-            session.addListener(new ClientListener(this.targetSubProtocol));
+            session.addListener(new ClientListener(this.targetSubProtocol, this.preferredProtocol));
         }
     }
 

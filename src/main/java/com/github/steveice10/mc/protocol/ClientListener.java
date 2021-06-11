@@ -30,7 +30,9 @@ import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.PacketSentEvent;
 import com.github.steveice10.packetlib.event.session.SessionAdapter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -42,6 +44,10 @@ import java.security.NoSuchAlgorithmException;
 @AllArgsConstructor
 public class ClientListener extends SessionAdapter {
     private final @NonNull SubProtocol targetSubProtocol;
+
+    @Getter
+    @Setter
+    private int preferredProtocl = 0;
 
     @Override
     public void packetReceived(PacketReceivedEvent event) {
@@ -137,8 +143,8 @@ public class ClientListener extends SessionAdapter {
     @Override
     public void connected(ConnectedEvent event) {
         if(this.targetSubProtocol == SubProtocol.LOGIN) {
-            System.out.println("debug");
-            event.getSession().send(new HandshakePacket(MinecraftConstants.PROTOCOL_VERSION, event.getSession().getHost(), event.getSession().getPort(), HandshakeIntent.LOGIN));
+            System.out.println("debug" + preferredProtocl);
+            event.getSession().send(new HandshakePacket(preferredProtocl == 0 ? MinecraftConstants.PROTOCOL_VERSION : preferredProtocl, event.getSession().getHost(), event.getSession().getPort(), HandshakeIntent.LOGIN));
         } else if(this.targetSubProtocol == SubProtocol.STATUS) {
             event.getSession().send(new HandshakePacket(MinecraftConstants.PROTOCOL_VERSION, event.getSession().getHost(), event.getSession().getPort(), HandshakeIntent.STATUS));
         }
