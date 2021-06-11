@@ -143,7 +143,6 @@ public class ClientListener extends SessionAdapter {
     @Override
     public void connected(ConnectedEvent event) {
         if(this.targetSubProtocol == SubProtocol.LOGIN) {
-            System.out.println("debug" + preferredProtocl);
             event.getSession().send(new HandshakePacket(preferredProtocl == 0 ? MinecraftConstants.PROTOCOL_VERSION : preferredProtocl, event.getSession().getHost(), event.getSession().getPort(), HandshakeIntent.LOGIN));
         } else if(this.targetSubProtocol == SubProtocol.STATUS) {
             event.getSession().send(new HandshakePacket(MinecraftConstants.PROTOCOL_VERSION, event.getSession().getHost(), event.getSession().getPort(), HandshakeIntent.STATUS));
